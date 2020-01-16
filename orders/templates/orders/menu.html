@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'orders/main.css' %}">
+    <title>Menu</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}. Thanks for logging in.</p> <a href="">shopping cart</a>
+    <a href="/logout">Log out</a>
+    {% else %}
+        <p>To make an order, please <a href='/login'>log in</a> or <a href='/signup'>register</a>.</p>
+    {% endif %}
+    <h1>Our menu</h1>
+        <tr>
+            {% for category in category %} <a>{{ category.ctg_name }} | </a> {% endfor %}
+        </tr>
+    <h3> Regular Pizza</h3>
+    <table><tbody>
+            {% for PizzaType in PizzaType %}
+                <tr>
+                <td width="50%">{{ PizzaType.type }}</td> <td width="25%">{{ PizzaType.priceSmall }}</td>
+                <td width="25%">{{ PizzaType.priceLarge }}</td>
+                 </tr>
+            {% endfor %}
+    </tbody></table>
+
+        <h3> Sicilian Pizza</h3>
+        <table>
+        <tbody>
+            {% for SizPizzaType in sicilian %}
+                <tr>
+                <td width="50%">{{ SizPizzaType.type }}</td> <td width="25%">{{ SizPizzaType.priceSmall }}</td>
+                    <td width="25%">{{ SizPizzaType.priceLarge }} </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <h3> Toppings </h3>
+            <ul>
+                {% for topping in toppings %}
+                        <li>{{ topping.topping }} </li>
+                {% endfor %}
+        </ul>
+        <h3> Subs </h3>
+            <ul>
+                {% for sub in subs %}
+                        <li>{{ sub.type }}
+                            {% if sub.priceSmall == sub.priceLarge %} +{% endif %}
+                            {{ sub.priceSmall }}
+                            {% if sub.priceSmall == sub.priceLarge %} +{% endif %}
+                            {{ sub.priceLarge }} </li>
+                {% endfor %}
+            </ul>
+        <h3> Pastas </h3>
+            <ul>
+                {% for pasta in pasta %}
+                        <li>{{ pasta.type }} {{ pasta.price }} </li>
+                {% endfor %}
+            </ul>
+        <h3> Salads </h3>
+            <ul>
+                {% for salad in salad %}
+                        <li>{{ salad.type }} {{ salad.price }} </li>
+                {% endfor %}
+            </ul>
+        <h3> Dinner Platters </h3>
+            <ul>
+                {% for platter in platter %}
+                        <li>{{ platter.dinnerPlatter }}
+                          Small ${{ platter.priceSmall }} Large ${{ platter.priceLarge }} </li>
+                {% endfor %}
+            </ul>
+</body>
+</html>
