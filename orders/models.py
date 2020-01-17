@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -67,6 +67,45 @@ class Category(models.Model):
     topping = models.ForeignKey(Topping, null=True, blank=True, default=True,
                                 on_delete=models.CASCADE, related_name='toppings')
     DinnerPlatter = models.ForeignKey(DinnerPlatter, null=True, blank=True, related_name='platter', on_delete=models.CASCADE)
+
     def __str__(self):
         return f"{self.ctg_name}"
+
+
+class Product(models.Model):
+    topping = models.ForeignKey(Topping, null=True, blank=True, default=True,
+                                on_delete=models.CASCADE)
+    dinner_plt = models.ForeignKey(DinnerPlatter, null=True, blank=True, default=True,
+                                on_delete=models.CASCADE)
+    pizza_normal = models.ForeignKey(PizzaType, null=True, blank=True, default=True,
+                                on_delete=models.CASCADE)
+    pizza_siz = models.ForeignKey(SicilianPizzaType, null=True, blank=True, default=True,
+                                on_delete=models.CASCADE)
+    sub = models.ForeignKey(Sub, null=True, blank=True, default=True,
+                                on_delete=models.CASCADE)
+    salad = models.ForeignKey(Salad, null=True, blank=True, default=True,
+                            on_delete=models.CASCADE)
+
+
+
+
+class Customer(models.Model):
+    customer = models.OneToOneField(User, null=True, blank=True, default=True, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Product, null=True, blank=True, default=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.customer}"
+
+
+class Order(models.Model):
+    items = models.ManyToManyField(Product)
+    date_ordered = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    fulfilled = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.owner} ordered {self.items} on {self.date_ordered}, fulfilled: {self.fulfilled}"
+
+    def get_order_items(self):
+        return self.items.all()
 
