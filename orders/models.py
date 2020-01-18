@@ -1,13 +1,22 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 # Create your models here.
 
 
-
 class Topping(models.Model):
     topping = models.CharField(max_length=64)
+
+
     def __str__(self):
         return f"{self.topping}"
+
+
+class Price(models.Model):
+    price = models.FloatField()
+
+    def __str__(self):
+        return f"{self.price}"
 
 
 class DinnerPlatter(models.Model):
@@ -56,25 +65,16 @@ class Pasta(models.Model):
 
 class Salad(models.Model):
     type = models.CharField(max_length=64)
-    price = models.FloatField()
+    price = models.DecimalField()
 
     def __str__(self):
         return f"{self.type}; price: {self.price}"
 
 
-class Category(models.Model):
-    ctg_name = models.CharField(max_length=64)
-    topping = models.ForeignKey(Topping, null=True, blank=True, default=True,
-                                on_delete=models.CASCADE, related_name='toppings')
-    DinnerPlatter = models.ForeignKey(DinnerPlatter, null=True, blank=True, related_name='platter', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.ctg_name}"
 
 
 class Product(models.Model):
-    topping = models.ForeignKey(Topping, null=True, blank=True, default=True,
-                                on_delete=models.CASCADE)
+    topping = models.ManyToManyField(Topping)
     dinner_plt = models.ForeignKey(DinnerPlatter, null=True, blank=True, default=True,
                                 on_delete=models.CASCADE)
     pizza_normal = models.ForeignKey(PizzaType, null=True, blank=True, default=True,
@@ -85,27 +85,47 @@ class Product(models.Model):
                                 on_delete=models.CASCADE)
     salad = models.ForeignKey(Salad, null=True, blank=True, default=True,
                             on_delete=models.CASCADE)
+    sizeLarge = models.BooleanField(default=True)
 
 
+    # showing products
 
+    def __str__(self):
+        field_values = []
+        for field in self._meta.get_fields():
+            if field:
+                field_values.append(str(getattr(self, field.name, '')))
+        return ' '.join(field_values)
+
+
+#class Purchase(models.Model):
+  #  product =
+    #price =
+  #  size =
 
 class Customer(models.Model):
     customer = models.OneToOneField(User, null=True, blank=True, default=True, on_delete=models.CASCADE)
     cart = models.ForeignKey(Product, null=True, blank=True, default=True, on_delete=models.CASCADE)
 
+
     def __str__(self):
-        return f"{self.customer}"
+        return f"{self.customer} cart: {self.cart}"
 
 
 class Order(models.Model):
     items = models.ManyToManyField(Product)
     date_ordered = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     fulfilled = models.BooleanField(default=False)
+    total_price = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.owner} ordered {self.items} on {self.date_ordered}, fulfilled: {self.fulfilled}"
+        return f"{self.owner} ordered {self.items.all()} on {self.date_ordered}, fulfilled: {self.fulfilled}"
 
     def get_order_items(self):
-        return self.items.all()
+        ordered = str(self.items.all())
+        return ordered
 
+
+   # def get_total(self):
+  #      return sum([item.])

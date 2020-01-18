@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping cart</title>
+</head>
+<body>
+    <p> {{ owner }}'s Cart </p>
+    <tr> {% for item in order %} </tr>
+        <td> {{ item.get_order_items }}</td>
+        {% endfor %}
+</body>
+</html>

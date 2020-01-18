@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import PizzaType, Topping, Category, Sub, SicilianPizzaType, Pasta, Salad, DinnerPlatter, Customer, Product, Order
+from .models import PizzaType, Topping, Sub, SicilianPizzaType, Pasta, Salad, DinnerPlatter, Customer, Product, Order
 from django.db.utils import OperationalError
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -15,7 +15,6 @@ try:
         context = {
             "menu": PizzaType.objects.all(),
             "toppings": Topping.objects.all(),
-            "category": Category.objects.all(),
             "PizzaType": PizzaType.objects.all(),
             "subs": Sub.objects.all(),
             "sicilian": SicilianPizzaType.objects.all(),
@@ -55,11 +54,10 @@ try:
         return redirect("login")
 
 
-    def cart_view(request):
-        pass
 
 except OperationalError:
     pass
+
 
 
 def add_to_cart(request, **kwargs):
@@ -73,3 +71,11 @@ def add_to_cart(request, **kwargs):
     user_order, status = Order.objects.get_or_create(owner=user, fulfilled=status)
     user_order.items.add(order_item)
     messages.info(request, "item added to cart")
+
+
+def cart_view(request):
+    context = {
+        "owner": Order.objects.get(owner=request.user.id),
+        "order": Order.objects.filter(pk=request.user.id)
+    }
+    return render(request, "orders/cart.html", context)
