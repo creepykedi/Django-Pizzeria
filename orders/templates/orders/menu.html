@@ -72,5 +72,18 @@
                           Small ${{ platter.priceSmall }} Large ${{ platter.priceLarge }} </li>
                 {% endfor %}
             </ul>
+        <h3>Subs</h3>
+            <table >
+                {% for subs in sub %}
+                    <tr>
+                        {% if subs.size == 'S' %}
+                            <td>{{ subs.type }}</td>
+                            <td>{{ subs.price }} </td>
+                        {% elif subs.size == 'L' %}
+                            <td>{{ subs.price }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
 </body>
 </html>

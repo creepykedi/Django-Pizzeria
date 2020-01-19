@@ -9,12 +9,18 @@
     <ul>
     {% if orders_list %}
         {% for item in orders_list %}
-        <li> {{ item }}</li>
-            {% endfor %}
+        <li> {{ item }} </li>
+            {% endfor %}</ul>
+        <!-- Deleting through accessing id in this shopping cart -->
+        <ul>
+        {% for id in item_id %}
+          <li><a href="{% url 'delete_item' id %}">Delete item</a></li>
+        {% endfor %}</ul>
+        <p>Total: {{ total_price }}</p>
+        <button><a href="{% url 'clean_cart'%}">Clean cart</a></button>
     {% else %}
         <p>Your shopping car is empty!</p>
     {% endif %}
-    </ul>
     <a href="{% url "menu" %}">Back to main page</a>
 </body>
 </html>

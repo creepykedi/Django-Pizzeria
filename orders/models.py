@@ -78,14 +78,6 @@ class Product(models.Model):
         return f"{self.name} {self.type}, {self.size}, price {self.price}"
 
 
-class Customer(models.Model):
-    customer = models.OneToOneField(User, null=True, blank=True, default=True, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Product, null=True, blank=True, default=True, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.customer} cart: {self.cart}"
-
-
 class Order(models.Model):
     items = models.ManyToManyField(Product)
     date_ordered = models.DateTimeField(auto_now=True)

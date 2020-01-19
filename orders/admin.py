@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import PizzaType, Topping, DinnerPlatter, Sub, SicilianPizzaType, Pasta, Salad,\
-    Product, Customer, Order
+    Product, Order
 
 admin.site.register(PizzaType)
 admin.site.register(Topping)
@@ -12,5 +12,4 @@ admin.site.register(SicilianPizzaType)
 admin.site.register(Pasta)
 admin.site.register(Salad)
 admin.site.register(Product)
-admin.site.register(Customer)
 admin.site.register(Order)
