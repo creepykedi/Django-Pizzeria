@@ -74,8 +74,21 @@ def add_to_cart(request, **kwargs):
 
 
 def cart_view(request):
+    order = Order.objects.filter(owner=request.user.id, fulfilled=False)
+    owner = request.user.username
+    orders_list = []
+    # if order exists
+    if order:
+        for order in order:
+            user_order = order
+            # access order items
+            user_order_items = user_order.items.all()
+            # add them to the list
+            orders_list.extend(product for product in user_order_items)
+
     context = {
-        "owner": Order.objects.get(owner=request.user.id),
-        "order": Order.objects.filter(pk=request.user.id)
+        "owner": owner,
+        "order": order,
+        "orders_list": orders_list,
     }
     return render(request, "orders/cart.html", context)
