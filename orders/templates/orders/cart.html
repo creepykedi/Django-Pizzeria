@@ -5,6 +5,7 @@
     <title>Shopping cart</title>
 </head>
 <body>
+    <a href="{% url "menu" %}">Back to main page</a>
     <p> {{ owner }}'s Cart: </p>
     <ul>
     {% if orders_list %}
@@ -18,9 +19,9 @@
         {% endfor %}</ul>
         <p>Total: {{ total_price }}</p>
         <button><a href="{% url 'clean_cart'%}">Clean cart</a></button>
+        <button>Order</button>
     {% else %}
         <p>Your shopping car is empty!</p>
     {% endif %}
-    <a href="{% url "menu" %}">Back to main page</a>
 </body>
 </html>

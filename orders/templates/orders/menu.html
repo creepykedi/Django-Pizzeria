@@ -18,23 +18,32 @@
             {% for category in category %} <a>{{ category.ctg_name }} | </a> {% endfor %}
         </tr>
     <h3> Regular Pizza</h3>
-    <table><tbody>
-            {% for PizzaType in PizzaType %}
-                <tr>
-                <td width="50%">{{ PizzaType.type }}</td> <td width="25%">{{ PizzaType.priceSmall }}</td>
-                <td width="25%">{{ PizzaType.priceLarge }}</td>
-                 </tr>
+        <table>
+        <th>
+            <td>Small</td> <td>Large</td>
+            </th>
+            {% for Pizza in regular %}
+                {% if Pizza.size == 'S' or Pizza.size == 'SING' %}<tr>
+                <td width="50%">{{ Pizza.type }}</td>
+                    <td width="25%">{{ Pizza.price }}</td>
+                    {% elif Pizza.size == 'L' %}
+                    <td width="25%">{{ Pizza.price }} </td></tr>
+                {% endif %}
             {% endfor %}
-    </tbody></table>
-
+        </table>
         <h3> Sicilian Pizza</h3>
         <table>
-        <tbody>
-            {% for SizPizzaType in sicilian %}
+        <th>
+            <td>Small</td> <td>Large</td>
+            </th>
+            {% for SizPizza in sicilian %}
+                {% if SizPizza.size == 'S' or SizPizza.size == 'SING' %}
                 <tr>
-                <td width="50%">{{ SizPizzaType.type }}</td> <td width="25%">{{ SizPizzaType.priceSmall }}</td>
-                    <td width="25%">{{ SizPizzaType.priceLarge }} </td>
-                </tr>
+                <td width="50%">{{ SizPizza.type }}</td>
+                    <td width="25%">{{ SizPizza.price }}</td>
+                    {% elif SizPizza.size == 'L' %}
+                    <td width="25%">{{ SizPizza.price }} </td></tr>
+                {% endif %}
             {% endfor %}
         </table>
         <h3> Toppings </h3>
@@ -43,16 +52,22 @@
                         <li>{{ topping.topping }} </li>
                 {% endfor %}
         </ul>
-        <h3> Subs </h3>
-            <ul>
-                {% for sub in subs %}
-                        <li>{{ sub.type }}
-                            {% if sub.priceSmall == sub.priceLarge %} +{% endif %}
-                            {{ sub.priceSmall }}
-                            {% if sub.priceSmall == sub.priceLarge %} +{% endif %}
-                            {{ sub.priceLarge }} </li>
+        <h3>Subs</h3>
+            <table >
+                <th>
+                    <td>Small</td><td>Large</td>
+                 </th>
+                 {% for subs in sub %}
+                        {% if subs.size == 'S' or subs.size == 'SING' %}<tr>
+                            <td width="50%">{{ subs.type }}</td>
+                            <td width="25%">{{ subs.price }}</td>
+                            {% elif subs.size == 'L' %}
+                            <td width="25%">
+                            {{ subs.price }}
+                            </td></tr>
+                        {% endif %}
                 {% endfor %}
-            </ul>
+            </table>
         <h3> Pastas </h3>
             <ul>
                 {% for pasta in pasta %}
@@ -72,18 +87,17 @@
                           Small ${{ platter.priceSmall }} Large ${{ platter.priceLarge }} </li>
                 {% endfor %}
             </ul>
-        <h3>Subs</h3>
-            <table >
-                {% for subs in sub %}
-                    <tr>
-                        {% if subs.size == 'S' %}
-                            <td>{{ subs.type }}</td>
-                            <td>{{ subs.price }} </td>
-                        {% elif subs.size == 'L' %}
-                            <td>{{ subs.price }}</td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </table>
+
+    <ul>
+    {% for x in product %}
+        {% if x.name == 'Regular Pizza' %}
+            {% if x.size == 'S' %}
+            <li> {{ x.type }} {{ x.price }}
+                {% else %}
+                    {{ x.price }}</li>
+                {% endif %}
+            {% endif %}
+    {% endfor %}
+    </ul>
 </body>
 </html>

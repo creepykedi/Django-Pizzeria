@@ -10,19 +10,18 @@ from django.contrib import messages
 # Create your views here.
 try:
     def menu(request):
-        sub = Product.objects.filter(name='Sub')
         context = {
-            "menu": PizzaType.objects.all(),
+            "menu": Product.objects.all(),
             "toppings": Topping.objects.all(),
-            "PizzaType": PizzaType.objects.all(),
-            "subs": Sub.objects.all(),
-            "sicilian": SicilianPizzaType.objects.all(),
-            "pasta": Pasta.objects.all(),
-            "salad": Salad.objects.all(),
-            "platter": DinnerPlatter.objects.all(),
+            "regular": Product.objects.filter(name='Regular Pizza'),
+            "sicilian": Product.objects.filter(name='Sicilian Pizza'),
+            "pasta": Product.objects.filter(name='Pasta'),
+            "salad": Product.objects.filter(name='Salads'),
+            "platter": Product.objects.filter(name='DinnerPlatter'),
             "user": request.user,
             "users": render(request, 'users/login.html'),
-            "sub": sub,
+            "sub": Product.objects.filter(name='Sub'),
+            "product": Product.objects.all()
         }
         return render(request, "orders/menu.html", context)
 
@@ -59,20 +58,18 @@ except OperationalError:
     pass
 
 
-
-def add_to_cart(request, **kwargs):
-    # get the user id
-  #  user = get_object_or_404(Customer, user=request.user)
+""" 
+def add_to_cart(request, item_id):
     # filter products by id
-    product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
+    product = Product.objects.filter(id=item_id).first()
     # create order item of selected product
-    order_item, status = Order.objects.get_or_create(items=product)
+    order_item = Order.objects.get_or_create(items=product)
     # create order associated with the user
-    user_order, status = Order.objects.get_or_create(owner=request.user.id, fulfilled=status)
+    user_order = Order.objects.get_or_create(owner=request.user.id, fulfilled=False)
     user_order.items.add(order_item)
     messages.info(request, "item added to cart")
 
-
+"""
 
 def cart_view(request):
     order = Order.objects.filter(owner=request.user.id, fulfilled=False)
