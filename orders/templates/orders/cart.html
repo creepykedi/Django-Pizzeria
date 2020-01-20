@@ -7,16 +7,14 @@
 <body>
     <a href="{% url "menu" %}">Back to main page</a>
     <p> {{ owner }}'s Cart: </p>
-    <ul>
+    <ol>
     {% if orders_list %}
-        {% for item in orders_list %}
-        <li> {{ item }} </li>
-            {% endfor %}</ul>
-        <!-- Deleting through accessing id in this shopping cart -->
-        <ul>
-        {% for id in item_id %}
-          <li><a href="{% url 'delete_item' id %}">Delete item</a></li>
-        {% endfor %}</ul>
+        <table>
+        {% for item in orders_list %}<tr>
+            <td width="50%"><li>{{ item }}</td><td><a href="{% url 'delete_item' item.id %}">Delete item</a></td></li>
+        </tr>{% endfor %}
+        </ol>
+        </table>
         <p>Total: {{ total_price }}</p>
         <button><a href="{% url 'clean_cart'%}">Clean cart</a></button>
         <button>Order</button>

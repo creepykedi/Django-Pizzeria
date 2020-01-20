@@ -25,9 +25,9 @@
             {% for Pizza in regular %}
                 {% if Pizza.size == 'S' or Pizza.size == 'SING' %}<tr>
                 <td width="50%">{{ Pizza.type }}</td>
-                    <td width="25%">{{ Pizza.price }}</td>
+                    <td width="25%">{{ Pizza.price }} <a href="{% url 'add' Pizza.id %}">+</a></td>
                     {% elif Pizza.size == 'L' %}
-                    <td width="25%">{{ Pizza.price }} </td></tr>
+                    <td width="25%">{{ Pizza.price }}  <a href="{% url 'add' Pizza.id %}">+</a></td></tr>
                 {% endif %}
             {% endfor %}
         </table>
@@ -39,10 +39,10 @@
             {% for SizPizza in sicilian %}
                 {% if SizPizza.size == 'S' or SizPizza.size == 'SING' %}
                 <tr>
-                <td width="50%">{{ SizPizza.type }}</td>
-                    <td width="25%">{{ SizPizza.price }}</td>
+                <td width="50%">{{ SizPizza.type }} </td>
+                    <td width="25%">{{ SizPizza.price }} <a href="{% url 'add' SizPizza.id %}">+</a></td>
                     {% elif SizPizza.size == 'L' %}
-                    <td width="25%">{{ SizPizza.price }} </td></tr>
+                    <td width="25%">{{ SizPizza.price }} <a href="{% url 'add' SizPizza.id %}">+</a></td></tr>
                 {% endif %}
             {% endfor %}
         </table>
@@ -59,11 +59,11 @@
                  </th>
                  {% for subs in sub %}
                         {% if subs.size == 'S' or subs.size == 'SING' %}<tr>
-                            <td width="50%">{{ subs.type }}</td>
-                            <td width="25%">{{ subs.price }}</td>
+                            <td width="50%">{{ subs.type }} </td>
+                            <td width="25%">{{ subs.price }} <a href="{% url 'add' subs.id %}">+</a></td>
                             {% elif subs.size == 'L' %}
                             <td width="25%">
-                            {{ subs.price }}
+                            {{ subs.price }} <a href="{% url 'add' subs.id %}">+</a>
                             </td></tr>
                         {% endif %}
                 {% endfor %}
@@ -71,33 +71,25 @@
         <h3> Pastas </h3>
             <ul>
                 {% for pasta in pasta %}
-                        <li>{{ pasta.type }} {{ pasta.price }} </li>
+                        <li>{{ pasta.type }} {{ pasta.price }}<a href="{% url 'add' pasta.id %}">+</a> </li>
                 {% endfor %}
             </ul>
         <h3> Salads </h3>
             <ul>
                 {% for salad in salad %}
-                        <li>{{ salad.type }} {{ salad.price }} </li>
+                        <li>{{ salad.type }} {{ salad.price }} <a href="{% url 'add' salad.id %}">+</a> </li>
                 {% endfor %}
             </ul>
         <h3> Dinner Platters </h3>
             <ul>
                 {% for platter in platter %}
-                        <li>{{ platter.dinnerPlatter }}
-                          Small ${{ platter.priceSmall }} Large ${{ platter.priceLarge }} </li>
+                    {% if platter.size == 'S' or platter.size == 'SING' %}
+                        <li>{{ platter.type }}
+                          Small ${{ platter.price }} <a href="{% url 'add' platter.id %}">+</a>
+                            {% elif platter.size == 'L' %}Large ${{ platter.price }} <a href="{% url 'add' platter.id %}">+</a></li>
+                    {% endif %}
                 {% endfor %}
             </ul>
 
-    <ul>
-    {% for x in product %}
-        {% if x.name == 'Regular Pizza' %}
-            {% if x.size == 'S' %}
-            <li> {{ x.type }} {{ x.price }}
-                {% else %}
-                    {{ x.price }}</li>
-                {% endif %}
-            {% endif %}
-    {% endfor %}
-    </ul>
 </body>
 </html>

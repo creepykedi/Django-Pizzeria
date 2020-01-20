@@ -2,10 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import PizzaType, Topping, Sub, SicilianPizzaType, Pasta, Salad, DinnerPlatter, Product, Order
+from .models import Topping, Product, Order
 from django.db.utils import OperationalError
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+
 from django.contrib import messages
 # Create your views here.
 try:
@@ -17,7 +19,7 @@ try:
             "sicilian": Product.objects.filter(name='Sicilian Pizza'),
             "pasta": Product.objects.filter(name='Pasta'),
             "salad": Product.objects.filter(name='Salads'),
-            "platter": Product.objects.filter(name='DinnerPlatter'),
+            "platter": Product.objects.filter(name='Dinner Platters'),
             "user": request.user,
             "users": render(request, 'users/login.html'),
             "sub": Product.objects.filter(name='Sub'),
@@ -58,18 +60,6 @@ except OperationalError:
     pass
 
 
-""" 
-def add_to_cart(request, item_id):
-    # filter products by id
-    product = Product.objects.filter(id=item_id).first()
-    # create order item of selected product
-    order_item = Order.objects.get_or_create(items=product)
-    # create order associated with the user
-    user_order = Order.objects.get_or_create(owner=request.user.id, fulfilled=False)
-    user_order.items.add(order_item)
-    messages.info(request, "item added to cart")
-
-"""
 
 def cart_view(request):
     order = Order.objects.filter(owner=request.user.id, fulfilled=False)
@@ -77,7 +67,6 @@ def cart_view(request):
     orders_list = []
     total_price = []
     item_id = []
-
     # if order exists
     if order:
         for order in order:
@@ -104,10 +93,27 @@ def cart_view(request):
 
 @login_required()
 def delete_from_cart(request, item_id):
-    item_to_delete = Order.objects.filter(owner=request.user.id, fulfilled=False, pk=item_id)
+    # getting product instance by its id
+    product = Product.objects.filter(pk=item_id).first()
+    # getting query set of this item from this user
+    item_to_delete = Order.objects.filter(owner=request.user.id, fulfilled=False, items=product.id)
     if item_to_delete.exists():
-        item_to_delete[0].delete()
+        item_to_delete.delete()
     return redirect(reverse('cart'))
+
+
+@login_required()
+def add_to_cart(request, item_id):
+    # get the user
+    buyer = User.objects.filter(id=request.user.id).first()
+    # get the instance of a product by its id
+    product = Product.objects.get(pk=item_id)
+    # create order for the user and save
+    newOrder = Order(owner=buyer)
+    newOrder.save()
+    # associate this order with the product
+    newOrder.items.add(product)
+    return redirect(reverse('menu'))
 
 
 @login_required()

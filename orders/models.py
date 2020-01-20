@@ -11,58 +11,6 @@ class Topping(models.Model):
         return f"{self.topping}"
 
 
-class DinnerPlatter(models.Model):
-    dinnerPlatter = models.CharField(max_length=64)
-    priceSmall = models.FloatField()
-    priceLarge = models.FloatField()
-
-    def __str__(self):
-        return f"{self.dinnerPlatter}; price: small {self.priceSmall}; large {self.priceLarge}"
-
-
-class PizzaType(models.Model):
-    type = models.CharField(max_length=64)
-    priceSmall = models.FloatField()
-    priceLarge = models.FloatField()
-
-    def __str__(self):
-        return f"{self.type}; price: small {self.priceSmall}; large {self.priceLarge}"
-
-
-class SicilianPizzaType(models.Model):
-    type = models.CharField(max_length=64)
-    priceSmall = models.FloatField()
-    priceLarge = models.FloatField()
-
-    def __str__(self):
-        return f"{self.type}; price: small {self.priceSmall}; large {self.priceLarge}"
-
-
-class Sub(models.Model):
-    type = models.CharField(max_length=64)
-    priceSmall = models.FloatField(blank=True, null=True, default=6.5)
-    priceLarge = models.FloatField(default=7.95)
-
-    def __str__(self):
-        return f"{self.type}; price: small {self.priceSmall}; large {self.priceLarge}"
-
-
-class Pasta(models.Model):
-    type = models.CharField(max_length=64)
-    price = models.FloatField()
-
-    def __str__(self):
-        return f"{self.type}; price: {self.price}"
-
-
-class Salad(models.Model):
-    type = models.CharField(max_length=64)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-
-    def __str__(self):
-        return f"{self.type}; price: {self.price}"
-
-
 class Product(models.Model):
     choices = [
         ('L', 'LARGE'),
