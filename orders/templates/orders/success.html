@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{% extends 'orders/base.html' %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block body %}
+    <h3>Thank you for ordering at Domuzcuk's pizza!</h3>
+    <p>Your order is on the way.</p>
+     <a href="{% url "menu" %}">Back to main page</a>
+{% endblock %}
+</body>
+</html>

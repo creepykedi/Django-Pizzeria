@@ -1,25 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+{% extends "orders/base.html" %}
 <head>
-    <meta charset="UTF-8">
+    {% block head %}
     <title>Shopping cart</title>
+    {% endblock %}
 </head>
-<body>
+{% block body %}
     <a href="{% url "menu" %}">Back to main page</a>
     <p> {{ owner }}'s Cart: </p>
-    <ol>
+    <ul>
     {% if orders_list %}
-        <table>
-        {% for item in orders_list %}<tr>
-            <td width="50%"><li>{{ item }}</td><td><a href="{% url 'delete_item' item.id %}">Delete item</a></td></li>
-        </tr>{% endfor %}
-        </ol>
+        <table class="table table-hover cart">
+        <tr>
+            <th>Order </th><th> Price </th><th></th></tr>
+            {% for item in orders_list %}
+                <tr>
+                <td>
+                    <li>{{ item.name }} {{ item.type }}, {{ item.size }}</td>
+                    <td>{{ item.price }} </td>
+                    <td><a href="{% url 'delete_item' item.id %}">Delete item</a></td>
+
+                    {% if 'topping' in item.type and order.toppingchoice is None %}<td>
+
+                    <div class="dropdown">
+                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose topping</button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% for topping in toppings %}
+                                <a class="dropdown-item" href="{% url 'select_topping' topping.topping order.id %}">{{ topping }}</a>
+                            {% endfor %}
+
+                     {% elif 'topping' in item.type and order.toppingchoice is not None %}
+                        <td>
+                            <div class="dropdown">
+                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ order.toppingchoice }} {{ order.id }} </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% for topping in toppings %}
+                                <a class="dropdown-item" href="{% url 'select_topping' topping.topping order.id %}">{{ topping }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>  </td>
+                    {% endif %}
+                    </li>
+                </tr>
+            {% endfor %}
+        <tr>
+        <td class="bold">Total:</td><td class="bold">{{ total_price }}</td>
+            <td><a href="{% url 'clean_cart'%}">Clean cart</a></td></tr>
         </table>
-        <p>Total: {{ total_price }}</p>
-        <button><a href="{% url 'clean_cart'%}">Clean cart</a></button>
-        <button>Order</button>
+    </ul>
+        <button type="button" class="btn btn-success btn-lg order"><a href="{% url "fulfill" %}">Order</a></button>
     {% else %}
         <p>Your shopping car is empty!</p>
     {% endif %}
+
+{% endblock %}
 </body>
 </html>

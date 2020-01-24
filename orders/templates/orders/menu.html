@@ -1,24 +1,24 @@
 <!DOCTYPE html>
+{% extends "orders/base.html" %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'orders/main.css' %}">
-    <title>Menu</title>
+<head>{% block head %}
+    <title>Menu</title> {% endblock %}
 </head>
 <body>
+{% block body %}
     {% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }}. Thanks for logging in.</p> <a href="{% url "cart" %}">shopping cart</a>
-    <a href="{% url "logout" %}">Log out</a>
+        <button type="button" class="btn btn-outline-success btn-lg mt-4"><a href="{% url "cart" %}">Shopping Cart</a></button>
+        <button type="button" class="btn btn-outline-danger btn-lg logout mt-4"><a href="{% url "logout" %}">Log out</a></button>
     {% else %}
-        <p>To make an order, please <a href="{% url "login" %}">log in</a> or <a href="{% url "signup" %}register</a>.</p>
+        <p>To make an order, please <a href="{% url "login" %}">log in</a>
+        or <a href="{% url "signup" %}">register</a>.</p>
     {% endif %}
     <h1>Our menu</h1>
         <tr>
             {% for category in category %} <a>{{ category.ctg_name }} | </a> {% endfor %}
         </tr>
     <h3> Regular Pizza</h3>
-        <table>
+        <table class="table table-hover">
         <th>
             <td>Small</td> <td>Large</td>
             </th>
@@ -32,7 +32,7 @@
             {% endfor %}
         </table>
         <h3> Sicilian Pizza</h3>
-        <table>
+        <table class="table table-hover">
         <th>
             <td>Small</td> <td>Large</td>
             </th>
@@ -47,13 +47,13 @@
             {% endfor %}
         </table>
         <h3> Toppings </h3>
-            <ul>
+            <ul class="list-group list-group">
                 {% for topping in toppings %}
-                        <li>{{ topping.topping }} </li>
+                        <li class="list-group-item">{{ topping.topping }} </li>
                 {% endfor %}
         </ul>
         <h3>Subs</h3>
-            <table >
+            <table class="table table-hover table-striped">
                 <th>
                     <td>Small</td><td>Large</td>
                  </th>
@@ -69,27 +69,27 @@
                 {% endfor %}
             </table>
         <h3> Pastas </h3>
-            <ul>
+            <ul class="list-group">
                 {% for pasta in pasta %}
-                        <li>{{ pasta.type }} {{ pasta.price }}<a href="{% url 'add' pasta.id %}">+</a> </li>
+                        <li class="list-group-item">{{ pasta.type }} {{ pasta.price }}<a href="{% url 'add' pasta.id %}">+</a> </li>
                 {% endfor %}
             </ul>
         <h3> Salads </h3>
-            <ul>
+            <ul class="list-group">
                 {% for salad in salad %}
-                        <li>{{ salad.type }} {{ salad.price }} <a href="{% url 'add' salad.id %}">+</a> </li>
+                        <li class="list-group-item">{{ salad.type }} {{ salad.price }} <a href="{% url 'add' salad.id %}">+</a> </li>
                 {% endfor %}
             </ul>
-        <h3> Dinner Platters </h3>
-            <ul>
+        <h3> Dinner Platters</h3>
+            <ul class="list-group">
                 {% for platter in platter %}
                     {% if platter.size == 'S' or platter.size == 'SING' %}
-                        <li>{{ platter.type }}
+                        <li class="list-group-item">{{ platter.type }}
                           Small ${{ platter.price }} <a href="{% url 'add' platter.id %}">+</a>
                             {% elif platter.size == 'L' %}Large ${{ platter.price }} <a href="{% url 'add' platter.id %}">+</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
-
+{% endblock %}
 </body>
 </html>

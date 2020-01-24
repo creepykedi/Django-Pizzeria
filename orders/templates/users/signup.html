@@ -1,16 +1,21 @@
 <!DOCTYPE html>
+{% extends "orders/base.html" %}
+{% load crispy_forms_tags %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login page</title>
+    {% block head %}
+        <title>Login page</title>
+    {% endblock %}
 </head>
 <body>
+{% block body %}
     <h2>Sign up</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy}}
         <input type="submit" value="Sign up">
     </form>
     <a href="{% url "menu" %}">Back to main page</a>
+{% endblock %}
 </body>
 </html>

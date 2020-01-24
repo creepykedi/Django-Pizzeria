@@ -2,6 +2,26 @@ td {
     border: solid 1px black;
 }
 
-h3{
-    font-size: 22px;
+h3, h1, h2 {
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+
+.logout{
+    margin-left: 42em;
+}
+
+.cart{
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+ul{
+    list-style-type:none
+}
+
+.bold{
+    font-weight: bold;
+}
+.order{
+    margin-left: 2em;
 }

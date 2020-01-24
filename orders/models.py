@@ -30,15 +30,25 @@ class Order(models.Model):
     items = models.ManyToManyField(Product)
     date_ordered = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    toppingchoice = models.ForeignKey(Topping, on_delete=models.CASCADE, null=True)
     fulfilled = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.owner} ordered {self.items.all()} on {self.date_ordered}, fulfilled: {self.fulfilled}"
+        return f"{self.owner} ordered {self.items.first()}, {self.toppingchoice} on {self.date_ordered}," \
+               f"fulfilled: {self.fulfilled}, topping: {self.toppingchoice}"
 
     def get_order_items(self):
         ordered = str(self.items.name)
         return ordered
 
+    def clean_fulfilled(self):
+        fulfilled = Order.objects.filter(fulfilled=True)
+        for order in fulfilled:
+            order.delete()
+
+
+class CompletedOrder(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
    # def get_total(self):
   #      return sum([item.])

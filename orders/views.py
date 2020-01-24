@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Topping, Product, Order
+from .models import Topping, Product, Order, CompletedOrder
 from django.db.utils import OperationalError
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -32,6 +32,8 @@ try:
             form = UserCreationForm(request.POST)
             if form.is_valid():
                 form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, f"Account created for {username}!")
                 # log the user in
                 return redirect('menu')
         else:
@@ -44,6 +46,7 @@ try:
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)
+                messages.success(request, f"Welcome, {user}. Thanks for logging in.")
                 return redirect('menu')
         else:
             form = AuthenticationForm()
@@ -54,7 +57,8 @@ try:
         logout(request)
         return redirect("login")
 
-
+    def success_view(request):
+        return redirect("orders/success.html")
 
 except OperationalError:
     pass
@@ -66,6 +70,7 @@ def cart_view(request):
     owner = request.user.username
     orders_list = []
     total_price = []
+    order_numb = []
     item_id = []
     # if order exists
     if order:
@@ -78,15 +83,16 @@ def cart_view(request):
             # add them to the list
             orders_list.extend(product for product in user_order_items)
             total_price.extend(product.price for product in user_order_items)
+            order_numb.append(order.toppingchoice)
     # calculating cart total
     total_price = sum(total_price)
-
     context = {
         "owner": owner,
         "order": order,
         "orders_list": orders_list,
         "total_price": total_price,
-        "item_id": item_id
+        "item_id": item_id,
+        "toppings": Topping.objects.all(),
     }
     return render(request, "orders/cart.html", context)
 
@@ -113,6 +119,7 @@ def add_to_cart(request, item_id):
     newOrder.save()
     # associate this order with the product
     newOrder.items.add(product)
+    messages.success(request, f"{product} added to cart.")
     return redirect(reverse('menu'))
 
 
@@ -122,4 +129,22 @@ def clean_cart(request):
     if delete.exists():
         for item in delete:
             item.delete()
+    return redirect(reverse('cart'))
+
+
+def fulfill_order(request):
+    items_to_order = Order.objects.filter(owner=request.user.id, fulfilled=False)
+    if items_to_order.exists():
+        for order in items_to_order:
+            order.fulfilled = True
+            order.save()
+            CompletedOrder(order=order).save()
+    return render(request, "orders/success.html")
+
+
+def select_topping(request, topping, order_id):
+    topping = Topping.objects.filter(topping=topping).first()
+    anorder = Order.objects.filter(pk=order_id).first()
+    anorder.toppingchoice = topping
+    anorder.save()
     return redirect(reverse('cart'))
