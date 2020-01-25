@@ -25,3 +25,8 @@ ul{
 .order{
     margin-left: 2em;
 }
+
+.heading-cart{
+    font-weight: 500;
+    justify-content: center;
+}

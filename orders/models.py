@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from multiselectfield import MultiSelectField
 # Create your models here.
 
 
@@ -27,14 +28,30 @@ class Product(models.Model):
 
 
 class Order(models.Model):
+    choices = [
+        ('Sausage', 'Sausage'),
+        ('Mushrooms', 'Mushrooms'),
+        ('Onions', 'Onions'),
+        ('Ham', 'Ham'),
+        ('Canadian Bacon', 'Canadian Bacon'),
+        ('Spinach', 'Spinach'),
+        ('Tomato & Basil', 'Tomato & Basil'),
+        ('Green Pepper', 'Green Pepper'),
+        ('Anchovies', 'Anchovies'),
+        ('Artichoke', 'Artichoke'),
+        ('Buffalo Chicken', 'Buffalo Chicken'),
+        ('Eggplant', 'Eggplant'),
+        ('Zucchini', 'Zucchini'),
+        ('Fresh Garlic', 'Fresh Garlic')
+    ]
     items = models.ManyToManyField(Product)
     date_ordered = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    toppingchoice = models.ForeignKey(Topping, on_delete=models.CASCADE, null=True)
+    toppingchoice = MultiSelectField(choices=choices, null=True, blank=True)
     fulfilled = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.owner} ordered {self.items.first()}, {self.toppingchoice} on {self.date_ordered}," \
+        return f"#{self.pk} {self.owner} ordered {self.items.first()}, {self.toppingchoice} on {self.date_ordered}," \
                f"fulfilled: {self.fulfilled}, topping: {self.toppingchoice}"
 
     def get_order_items(self):
@@ -45,6 +62,7 @@ class Order(models.Model):
         fulfilled = Order.objects.filter(fulfilled=True)
         for order in fulfilled:
             order.delete()
+
 
 
 class CompletedOrder(models.Model):

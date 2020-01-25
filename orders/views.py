@@ -50,6 +50,7 @@ try:
                 return redirect('menu')
         else:
             form = AuthenticationForm()
+
         return render(request, 'users/login.html', {'form': form})
 
 
@@ -64,14 +65,13 @@ except OperationalError:
     pass
 
 
-
 def cart_view(request):
     order = Order.objects.filter(owner=request.user.id, fulfilled=False)
     owner = request.user.username
-    orders_list = []
     total_price = []
     order_numb = []
     item_id = []
+
     # if order exists
     if order:
         for order in order:
@@ -81,18 +81,18 @@ def cart_view(request):
             # access order items
             user_order_items = user_order.items.all()
             # add them to the list
-            orders_list.extend(product for product in user_order_items)
             total_price.extend(product.price for product in user_order_items)
-            order_numb.append(order.toppingchoice)
+            # access whole order from where we can get topping info and order id
+            order_numb.append(order)
     # calculating cart total
     total_price = sum(total_price)
+
     context = {
         "owner": owner,
-        "order": order,
-        "orders_list": orders_list,
         "total_price": total_price,
         "item_id": item_id,
         "toppings": Topping.objects.all(),
+        "order_numb": order_numb,
     }
     return render(request, "orders/cart.html", context)
 
@@ -143,8 +143,33 @@ def fulfill_order(request):
 
 
 def select_topping(request, topping, order_id):
-    topping = Topping.objects.filter(topping=topping).first()
+    topping = Topping.objects.filter(topping=topping)
     anorder = Order.objects.filter(pk=order_id).first()
-    anorder.toppingchoice = topping
-    anorder.save()
+    for topping in topping:
+        anorder.toppingchoice = topping.topping
+        anorder.save()
+    return redirect(reverse('cart'))
+
+
+def add_topping(request, order_id, item_type):
+    if request.method == "POST":
+        top = request.POST['topselect']
+        order = Order.objects.filter(pk=order_id).first()
+        print(item_type)
+        topping_list = []
+        print(top)
+        order.toppingchoice = top
+        order.save()
+        """ 
+        if '2' in item_type:
+            print('ye')
+            topping_list.clear()
+            if len(topping_list) < 2:
+                topping_list.append(top)
+                print(topping_list)
+            else:
+                order.toppingchoice = topping_list
+                order.save()
+                topping_list.clear()
+        """
     return redirect(reverse('cart'))

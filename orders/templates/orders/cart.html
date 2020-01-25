@@ -1,57 +1,70 @@
 <!DOCTYPE html>
+<html lang="en">
 {% extends "orders/base.html" %}
 <head>
     {% block head %}
     <title>Shopping cart</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     {% endblock %}
 </head>
+<body>
 {% block body %}
     <a href="{% url "menu" %}">Back to main page</a>
-    <p> {{ owner }}'s Cart: </p>
+    <p class="heading-cart"> {{ owner.capitalize }}'s Cart: </p>
     <ul>
-    {% if orders_list %}
+    {% if order_numb %}
         <table class="table table-hover cart">
         <tr>
-            <th>Order </th><th> Price </th><th></th></tr>
-            {% for item in orders_list %}
+            <th>Order</th><th>Price </th><th></th><th></th></tr>
+        {% for order in order_numb %}
+            <!-- Items chosen -->
+            {% for item in order.items.all %}
                 <tr>
                 <td>
                     <li>{{ item.name }} {{ item.type }}, {{ item.size }}</td>
                     <td>{{ item.price }} </td>
                     <td><a href="{% url 'delete_item' item.id %}">Delete item</a></td>
 
-                    {% if 'topping' in item.type and order.toppingchoice is None %}<td>
-
-                    <div class="dropdown">
-                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose topping</button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <!-- showing chosen toppings -->
+                     {% if 'topping' in item.type and order.toppingchoice is not None %}
+                        <td> {{ order.toppingchoice }}
+                     <!-- Select toppings -->
+                        <!-- Passing order id with submitted topping -->
+                        <form method="post" action="{% url 'add_topping' order.id item.type %}">
+                        {% csrf_token %}
+                        <select name="topselect" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                        {% if order.toppingchoice in toppings %}
+                                <option selected>{{order.toppingchoice}}</option>
+                        {% else %}
+                            <option selected>Select Topping</option>
+                        {% endif %}
                             {% for topping in toppings %}
-                                <a class="dropdown-item" href="{% url 'select_topping' topping.topping order.id %}">{{ topping }}</a>
+                                <option value={{ topping }}>{{ topping }}</option>
                             {% endfor %}
-
-                     {% elif 'topping' in item.type and order.toppingchoice is not None %}
-                        <td>
-                            <div class="dropdown">
-                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ order.toppingchoice }} {{ order.id }} </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            {% for topping in toppings %}
-                                <a class="dropdown-item" href="{% url 'select_topping' topping.topping order.id %}">{{ topping }}</a>
-                            {% endfor %}
-                        </div>
-                    </div>  </td>
+                        </select>
+                        <button type="submit" class="btn btn-primary mt-3">Save</button>
+                        </form>
+                        </td>
                     {% endif %}
                     </li>
                 </tr>
             {% endfor %}
+        {% endfor %}
         <tr>
         <td class="bold">Total:</td><td class="bold">{{ total_price }}</td>
             <td><a href="{% url 'clean_cart'%}">Clean cart</a></td></tr>
         </table>
     </ul>
-        <button type="button" class="btn btn-success btn-lg order"><a href="{% url "fulfill" %}">Order</a></button>
+    <button type="button" class="btn btn-success btn-lg order"><a href="{% url "fulfill" %}">Order</a></button>
     {% else %}
         <p>Your shopping car is empty!</p>
     {% endif %}
+
+
+<!--Scripts for select customization -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
+
 
 {% endblock %}
 </body>
