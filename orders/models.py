@@ -30,19 +30,20 @@ class Product(models.Model):
 class Order(models.Model):
     choices = [
         ('Sausage', 'Sausage'),
+        ('Pepperoni', 'Pepperoni'),
         ('Mushrooms', 'Mushrooms'),
         ('Onions', 'Onions'),
         ('Ham', 'Ham'),
-        ('Canadian Bacon', 'Canadian Bacon'),
+        ('Canadian', 'Canadian Bacon'),
         ('Spinach', 'Spinach'),
-        ('Tomato & Basil', 'Tomato & Basil'),
-        ('Green Pepper', 'Green Pepper'),
+        ('Tomato', 'Tomato & Basil'),
+        ('Green', 'Green Pepper'),
         ('Anchovies', 'Anchovies'),
         ('Artichoke', 'Artichoke'),
-        ('Buffalo Chicken', 'Buffalo Chicken'),
+        ('Buffalo', 'Buffalo Chicken'),
         ('Eggplant', 'Eggplant'),
         ('Zucchini', 'Zucchini'),
-        ('Fresh Garlic', 'Fresh Garlic')
+        ('Fresh', 'Fresh Garlic')
     ]
     items = models.ManyToManyField(Product)
     date_ordered = models.DateTimeField(auto_now=True)

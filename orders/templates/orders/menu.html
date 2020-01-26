@@ -7,13 +7,14 @@
 <body>
 {% block body %}
     {% if user.is_authenticated %}
-        <button type="button" class="btn btn-outline-success btn-lg mt-4"><a href="{% url "cart" %}">Shopping Cart</a></button>
-        <button type="button" class="btn btn-outline-danger btn-lg logout mt-4"><a href="{% url "logout" %}">Log out</a></button>
+        <button type="button" class="btn btn-outline-success btn-lg mt-4"><a class="button" href="{% url "cart" %}">Shopping Cart</a></button>
+        <button type="button" class="btn btn-outline-danger btn-lg logout mt-4"><a class="button" href="{% url "logout" %}">Log out</a></button>
     {% else %}
         <p>To make an order, please <a href="{% url "login" %}">log in</a>
         or <a href="{% url "signup" %}">register</a>.</p>
     {% endif %}
     <h1>Our menu</h1>
+    <div class="col-8">
         <tr>
             {% for category in category %} <a>{{ category.ctg_name }} | </a> {% endfor %}
         </tr>
@@ -90,6 +91,8 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+     </div>
+    <p></p>
 {% endblock %}
 </body>
 </html>

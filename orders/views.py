@@ -110,6 +110,7 @@ def delete_from_cart(request, item_id):
 
 @login_required()
 def add_to_cart(request, item_id):
+
     # get the user
     buyer = User.objects.filter(id=request.user.id).first()
     # get the instance of a product by its id
@@ -142,34 +143,28 @@ def fulfill_order(request):
     return render(request, "orders/success.html")
 
 
-def select_topping(request, topping, order_id):
-    topping = Topping.objects.filter(topping=topping)
-    anorder = Order.objects.filter(pk=order_id).first()
-    for topping in topping:
-        anorder.toppingchoice = topping.topping
-        anorder.save()
-    return redirect(reverse('cart'))
-
-
 def add_topping(request, order_id, item_type):
     if request.method == "POST":
         top = request.POST['topselect']
         order = Order.objects.filter(pk=order_id).first()
-        print(item_type)
         topping_list = []
         print(top)
-        order.toppingchoice = top
-        order.save()
-        """ 
-        if '2' in item_type:
-            print('ye')
-            topping_list.clear()
-            if len(topping_list) < 2:
-                topping_list.append(top)
-                print(topping_list)
-            else:
+        # function checks how many toppings were chosen
+        n = str(item_type[0])
+        if n in item_type:
+            # get already selected toppings
+            selected = order.toppingchoice
+            topping_list.append(top)
+            topping_list.extend(selected)
+            if len(topping_list) < int(n):
+                order.toppingchoice = topping_list
+                order.save()
+            elif len(topping_list) == int(n):
                 order.toppingchoice = topping_list
                 order.save()
                 topping_list.clear()
-        """
+            else:
+                topping_list.clear()
+                order.toppingchoice.clear()
     return redirect(reverse('cart'))
+

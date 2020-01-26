@@ -10,12 +10,12 @@
 <body>
 {% block body %}
     <a href="{% url "menu" %}">Back to main page</a>
-    <p class="heading-cart"> {{ owner.capitalize }}'s Cart: </p>
+    <p class="heading-cart"> {{ owner.capitalize }}'s Shopping Cart: </p>
     <ul>
     {% if order_numb %}
         <table class="table table-hover cart">
         <tr>
-            <th>Order</th><th>Price </th><th></th><th></th></tr>
+            <th>Order</th><th>Price </th><th>Actions</th><th>Topping</th></tr>
         {% for order in order_numb %}
             <!-- Items chosen -->
             {% for item in order.items.all %}
@@ -28,6 +28,7 @@
                 <!-- showing chosen toppings -->
                      {% if 'topping' in item.type and order.toppingchoice is not None %}
                         <td> {{ order.toppingchoice }}
+
                      <!-- Select toppings -->
                         <!-- Passing order id with submitted topping -->
                         <form method="post" action="{% url 'add_topping' order.id item.type %}">
@@ -42,9 +43,10 @@
                                 <option value={{ topping }}>{{ topping }}</option>
                             {% endfor %}
                         </select>
-                        <button type="submit" class="btn btn-primary mt-3">Save</button>
+                        <button type="submit" class="btn btn-primary mt-3" id="choose-topping">Add</button>
                         </form>
                         </td>
+                     {% else %} <td></td>
                     {% endif %}
                     </li>
                 </tr>
@@ -55,9 +57,9 @@
             <td><a href="{% url 'clean_cart'%}">Clean cart</a></td></tr>
         </table>
     </ul>
-    <button type="button" class="btn btn-success btn-lg order"><a href="{% url "fulfill" %}">Order</a></button>
+    <button type="button" class="btn btn-success btn-lg order" id="make-order"><a id="make-order-link" href="{% url "fulfill" %}">Order</a></button>
     {% else %}
-        <p>Your shopping car is empty!</p>
+        <p class="empty">Your shopping car is empty!</p>
     {% endif %}
 
 
