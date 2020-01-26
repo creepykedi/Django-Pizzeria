@@ -8,6 +8,7 @@
 {% block body %}
     {% if user.is_authenticated %}
         <button type="button" class="btn btn-outline-success btn-lg mt-4"><a class="button" href="{% url "cart" %}">Shopping Cart</a></button>
+         <button type="button" class="btn btn-outline-success btn-lg mt-4"><a class="button" href="{% url "my_orders" %}">My Orders</a></button>
         <button type="button" class="btn btn-outline-danger btn-lg logout mt-4"><a class="button" href="{% url "logout" %}">Log out</a></button>
     {% else %}
         <p>To make an order, please <a href="{% url "login" %}">log in</a>
@@ -15,14 +16,11 @@
     {% endif %}
     <h1>Our menu</h1>
     <div class="col-8">
-        <tr>
             {% for category in category %} <a>{{ category.ctg_name }} | </a> {% endfor %}
-        </tr>
     <h3> Regular Pizza</h3>
         <table class="table table-hover">
-        <th>
-            <td>Small</td> <td>Large</td>
-            </th>
+            <th>Type</th>
+            <th>Small</th> <th>Large</th>
             {% for Pizza in regular %}
                 {% if Pizza.size == 'S' or Pizza.size == 'SING' %}<tr>
                 <td width="50%">{{ Pizza.type }}</td>
@@ -34,16 +32,16 @@
         </table>
         <h3> Sicilian Pizza</h3>
         <table class="table table-hover">
-        <th>
-            <td>Small</td> <td>Large</td>
-            </th>
+            <th>Type</th>
+            <th>Small</th> <th>Large</th>
+
             {% for SizPizza in sicilian %}
                 {% if SizPizza.size == 'S' or SizPizza.size == 'SING' %}
                 <tr>
                 <td width="50%">{{ SizPizza.type }} </td>
-                    <td width="25%">{{ SizPizza.price }} <a href="{% url 'add' SizPizza.id %}">+</a></td>
+                    <td  width="25%">{{ SizPizza.price }} <a class="add-cart" href="{% url 'add' SizPizza.id %}">+</a></td>
                     {% elif SizPizza.size == 'L' %}
-                    <td width="25%">{{ SizPizza.price }} <a href="{% url 'add' SizPizza.id %}">+</a></td></tr>
+                    <td width="25%">{{ SizPizza.price }} <a class="add-cart" href="{% url 'add' SizPizza.id %}">+</a></td></tr>
                 {% endif %}
             {% endfor %}
         </table>
@@ -55,9 +53,8 @@
         </ul>
         <h3>Subs</h3>
             <table class="table table-hover table-striped">
-                <th>
-                    <td>Small</td><td>Large</td>
-                 </th>
+                <th>Type</th>
+                    <th>Small</th><th>Large</th>
                  {% for subs in sub %}
                         {% if subs.size == 'S' or subs.size == 'SING' %}<tr>
                             <td width="50%">{{ subs.type }} </td>

@@ -1,0 +1,19 @@
+{% extends "orders/base.html" %}
+{% block body %}
+    <a href="{% url "menu" %}">Back to main page</a>
+
+    <table class="table table-hover cart">
+<ol>
+    <tr>
+            <th>#</th><th>Order</th><th>Price</th><th>Date</th>
+        </tr>
+    {% for order in orders %}
+        <tr>
+        <td> {{ forloop.counter }}</td>
+        <td> {{ order}} </td>
+            <td></td>
+        <td> {{ order.date_ordered }}</td>
+        </tr>
+    {% endfor %}
+</ol>
+{% endblock %}

@@ -65,9 +65,6 @@ class Order(models.Model):
             order.delete()
 
 
-
 class CompletedOrder(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
-   # def get_total(self):
-  #      return sum([item.])

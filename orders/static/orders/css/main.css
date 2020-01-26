@@ -39,7 +39,7 @@ button.order{
     width: 15em;
 }
 
-#choose-topping{
+#choose-topping, #clear-topping {
     width: 4em;
     margin-bottom: 1.1em;
 }
@@ -51,6 +51,10 @@ button.order{
 a:hover.button{
     color: white;
     text-decoration: none;
+}
+
+button .clr{
+    color: white;
 }
 
 .heading-cart{
@@ -65,4 +69,8 @@ a:hover.button{
 
 td {
     border-color: lightgray;
+}
+th{
+    border: 1px solid #a8a8a8;
+    background-color: #f4f4f4;
 }

@@ -15,20 +15,20 @@
     {% if order_numb %}
         <table class="table table-hover cart">
         <tr>
-            <th>Order</th><th>Price </th><th>Actions</th><th>Topping</th></tr>
+            <th>#</th><th>Order</th><th>Price </th><th>Actions</th><th>Topping</th>
+        </tr>
         {% for order in order_numb %}
             <!-- Items chosen -->
             {% for item in order.items.all %}
                 <tr>
+                <td>{{ forloop.parentloop.counter }}.</td>
                 <td>
                     <li>{{ item.name }} {{ item.type }}, {{ item.size }}</td>
                     <td>{{ item.price }} </td>
                     <td><a href="{% url 'delete_item' item.id %}">Delete item</a></td>
-
                 <!-- showing chosen toppings -->
                      {% if 'topping' in item.type and order.toppingchoice is not None %}
                         <td> {{ order.toppingchoice }}
-
                      <!-- Select toppings -->
                         <!-- Passing order id with submitted topping -->
                         <form method="post" action="{% url 'add_topping' order.id item.type %}">
@@ -44,7 +44,9 @@
                             {% endfor %}
                         </select>
                         <button type="submit" class="btn btn-primary mt-3" id="choose-topping">Add</button>
+                        <button class="btn btn-primary mt-3" id="clear-topping"><a class="button clr" href="{% url 'clear_topping' order.id %}">Clear</a></button>
                         </form>
+
                         </td>
                      {% else %} <td></td>
                     {% endif %}
@@ -52,12 +54,12 @@
                 </tr>
             {% endfor %}
         {% endfor %}
-        <tr>
+        <tr><td></td>
         <td class="bold">Total:</td><td class="bold">{{ total_price }}</td>
-            <td><a href="{% url 'clean_cart'%}">Clean cart</a></td></tr>
+            <td><a href="{% url 'clean_cart'%}">Clean cart</a></td><td></td></tr>
         </table>
     </ul>
-    <button type="button" class="btn btn-success btn-lg order" id="make-order"><a id="make-order-link" href="{% url "fulfill" %}">Order</a></button>
+    <button type="button" class="btn btn-success btn-lg order float-right" id="make-order"><a id="make-order-link" href="{% url "fulfill" %}">Order</a></button>
     {% else %}
         <p class="empty">Your shopping car is empty!</p>
     {% endif %}

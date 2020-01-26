@@ -87,6 +87,8 @@ def cart_view(request):
     # calculating cart total
     total_price = sum(total_price)
 
+
+
     context = {
         "owner": owner,
         "total_price": total_price,
@@ -96,6 +98,11 @@ def cart_view(request):
     }
     return render(request, "orders/cart.html", context)
 
+@login_required()
+def my_orders_view(request):
+    orders = Order.objects.filter(owner=request.user.id, fulfilled=True).all()
+
+    return render(request, 'orders/my_orders.html', {'orders': orders})
 
 @login_required()
 def delete_from_cart(request, item_id):
@@ -109,8 +116,8 @@ def delete_from_cart(request, item_id):
 
 
 @login_required()
-def add_to_cart(request, item_id):
 
+def add_to_cart(request, item_id):
     # get the user
     buyer = User.objects.filter(id=request.user.id).first()
     # get the instance of a product by its id
@@ -165,6 +172,11 @@ def add_topping(request, order_id, item_type):
                 topping_list.clear()
             else:
                 topping_list.clear()
-                order.toppingchoice.clear()
+
     return redirect(reverse('cart'))
 
+def clear_topping(request, order_id):
+    order = Order.objects.filter(pk=order_id).first()
+    order.toppingchoice = []
+    order.save()
+    return redirect(reverse('cart'))
