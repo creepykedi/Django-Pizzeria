@@ -18,8 +18,9 @@
             </div>
                     <button type="submit" class="btn btn-success">Login</button>
                 </div>
-
+        <small id="passwordHelpBlock" class="form-text text-muted">Need an account? Click <a href="{% url "signup" %}">here</a> to sign up.</small>
     </form>
+
     <a href="{% url "menu" %}">Back to main page</a>
 {% endblock %}
 </body>

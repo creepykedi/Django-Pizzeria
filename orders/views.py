@@ -64,7 +64,7 @@ try:
 except OperationalError:
     pass
 
-
+@login_required(login_url='login')
 def cart_view(request):
     order = Order.objects.filter(owner=request.user.id, fulfilled=False)
     owner = request.user.username
@@ -98,11 +98,13 @@ def cart_view(request):
     }
     return render(request, "orders/cart.html", context)
 
-@login_required()
+
+@login_required(login_url='login')
 def my_orders_view(request):
-    orders = Order.objects.filter(owner=request.user.id, fulfilled=True).all()
+    orders = Order.objects.filter(owner=request.user.id, fulfilled=True).all().order_by("-date_ordered")
 
     return render(request, 'orders/my_orders.html', {'orders': orders})
+
 
 @login_required()
 def delete_from_cart(request, item_id):
@@ -115,8 +117,7 @@ def delete_from_cart(request, item_id):
     return redirect(reverse('cart'))
 
 
-@login_required()
-
+@login_required(login_url='login')
 def add_to_cart(request, item_id):
     # get the user
     buyer = User.objects.filter(id=request.user.id).first()
@@ -131,7 +132,7 @@ def add_to_cart(request, item_id):
     return redirect(reverse('menu'))
 
 
-@login_required()
+@login_required(login_url='login')
 def clean_cart(request):
     delete = Order.objects.filter(owner=request.user.id, fulfilled=False)
     if delete.exists():
@@ -139,17 +140,7 @@ def clean_cart(request):
             item.delete()
     return redirect(reverse('cart'))
 
-
-def fulfill_order(request):
-    items_to_order = Order.objects.filter(owner=request.user.id, fulfilled=False)
-    if items_to_order.exists():
-        for order in items_to_order:
-            order.fulfilled = True
-            order.save()
-            CompletedOrder(order=order).save()
-    return render(request, "orders/success.html")
-
-
+@login_required(login_url='login')
 def add_topping(request, order_id, item_type):
     if request.method == "POST":
         top = request.POST['topselect']
@@ -161,6 +152,7 @@ def add_topping(request, order_id, item_type):
         if n in item_type:
             # get already selected toppings
             selected = order.toppingchoice
+            # add them to list of selected toppings
             topping_list.append(top)
             topping_list.extend(selected)
             if len(topping_list) < int(n):
@@ -175,8 +167,22 @@ def add_topping(request, order_id, item_type):
 
     return redirect(reverse('cart'))
 
+
+@login_required(login_url='login')
 def clear_topping(request, order_id):
     order = Order.objects.filter(pk=order_id).first()
     order.toppingchoice = []
     order.save()
     return redirect(reverse('cart'))
+
+
+@login_required(login_url='login')
+def fulfill_order(request):
+    items_to_order = Order.objects.filter(owner=request.user.id, fulfilled=False)
+    if items_to_order.exists():
+        for order in items_to_order:
+            order.fulfilled = True
+            order.save()
+            CompletedOrder(order=order).save()
+    return render(request, "orders/success.html")
+

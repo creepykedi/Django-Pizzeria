@@ -10,10 +10,11 @@
     {% for order in orders %}
         <tr>
         <td> {{ forloop.counter }}</td>
-        <td> {{ order}} </td>
+        <td> {{ order }} </td>
             <td></td>
         <td> {{ order.date_ordered }}</td>
         </tr>
     {% endfor %}
 </ol>
+    </table>
 {% endblock %}

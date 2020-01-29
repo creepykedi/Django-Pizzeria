@@ -39,7 +39,7 @@ button.order{
     width: 15em;
 }
 
-#choose-topping, #clear-topping {
+.choose-topping, .clear-topping {
     width: 4em;
     margin-bottom: 1.1em;
 }
