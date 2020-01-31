@@ -9,7 +9,6 @@
 </head>
 <>
 {% block body %}
-    <a href="{% url "menu" %}">Back to main page</a>
     <p class="heading-cart"> {{ owner.capitalize }}'s Shopping Cart: </p>
     <ul>
     {% if order_numb %}
@@ -23,12 +22,12 @@
                 <tr class="order-row">
                 <td>{{ forloop.parentloop.counter }}.</td>
                 <td>
-                    <li class="order-item">{{ item.name }} {{ item.type }}, {{ item.size }}</td>
+                    <li class="order-item">{{ item.name }} {{ item.type }}, {{ item.get_size_display.capitalize }}</td>
                     <td>{{ item.price }} </td>
-                    <td><a href="{% url 'delete_item' item.id %}">Delete item</a></td>
+                    <td><a href="{% url 'delete_item' order.id %}">Delete item</a></td>
                 <!-- showing chosen toppings -->
                      {% if 'topping' in item.type and order.toppingchoice is not None %}
-                        <td> <p class="chosen-toppings">{{ order.toppingchoice }}</p>
+                        <td class="w-25"> <p class="chosen-toppings">{{ order.toppingchoice }}</p>
                      <!-- Select toppings -->
                         <!-- Passing order id with submitted topping -->
                         <form method="post" action="{% url 'add_topping' order.id item.type %}">
@@ -58,7 +57,7 @@
             <td><a href="{% url 'clean_cart'%}">Clean cart</a></td><td></td></tr>
         </table>
     </ul>
-    <button type="button" class="btn btn-success btn-lg order float-right" id="make-order"><a id="make-order-link" href="{% url "fulfill" %}">Order</a></button>
+    <a id="make-order-link" href="{% url "fulfill" %}" class="btn btn-success btn-lg order float-right">Order</a>
     {% else %}
         <p class="empty">Your shopping car is empty!</p>
     {% endif %}

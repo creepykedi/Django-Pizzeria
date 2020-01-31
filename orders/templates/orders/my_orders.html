@@ -1,7 +1,5 @@
 {% extends "orders/base.html" %}
 {% block body %}
-    <a href="{% url "menu" %}">Back to main page</a>
-
     <table class="table table-hover cart">
 <ol>
     <tr>
@@ -9,9 +7,10 @@
         </tr>
     {% for order in orders %}
         <tr>
-        <td> {{ forloop.counter }}</td>
-        <td> {{ order }} </td>
-            <td></td>
+        <td> {{ forloop.counter }}.</td>
+            {% for product in order.items.all %}
+                <td> {{ product.name }} {{ product.type }} {{ product.get_size_display.capitalize }} </td>
+                    <td>{{ product.price }}</td>{% endfor %}
         <td> {{ order.date_ordered }}</td>
         </tr>
     {% endfor %}

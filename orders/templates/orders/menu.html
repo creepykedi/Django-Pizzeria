@@ -7,26 +7,24 @@
 <body>
 {% block body %}
     {% if user.is_authenticated %}
-        <button type="button" class="btn btn-outline-success btn-lg mt-4"><a class="button" href="{% url "cart" %}">Shopping Cart</a></button>
-         <button type="button" class="btn btn-outline-success btn-lg mt-4"><a class="button" href="{% url "my_orders" %}">My Orders</a></button>
-        <button type="button" class="btn btn-outline-danger btn-lg logout mt-4"><a class="button" href="{% url "logout" %}">Log out</a></button>
     {% else %}
         <p>To make an order, please <a href="{% url "login" %}">log in</a>
         or <a href="{% url "signup" %}">register</a>.</p>
     {% endif %}
     <h1>Our menu</h1>
-    <div class="col-8">
-            {% for category in category %} <a>{{ category.ctg_name }} | </a> {% endfor %}
-    <h3> Regular Pizza</h3>
+    <div class="col-10 menu-category justify-content-center">
+            <a href="">Regular Pizza | </a> <a href="">Sizilian Pizza | </a><a href="">Subs | </a>
+        <a href="">Pastas | </a> <a href="">Salads | </a> <a href="">Dinner Platters </a>
+    <h3>Regular Pizza</h3>
         <table class="table table-hover">
             <th>Type</th>
             <th>Small</th> <th>Large</th>
             {% for Pizza in regular %}
                 {% if Pizza.size == 'S' or Pizza.size == 'SING' %}<tr>
                 <td width="50%">{{ Pizza.type }}</td>
-                    <td width="25%">{{ Pizza.price }} <a href="{% url 'add' Pizza.id %}">+</a></td>
+                    <td width="25%">{{ Pizza.price }} <a class="addToCart" href="{% url 'add' Pizza.id %}">+</a></td>
                     {% elif Pizza.size == 'L' %}
-                    <td width="25%">{{ Pizza.price }}  <a href="{% url 'add' Pizza.id %}">+</a></td></tr>
+                    <td width="25%">{{ Pizza.price }}  <a class="addToCart" href="{% url 'add' Pizza.id %}">+</a></td></tr>
                 {% endif %}
             {% endfor %}
         </table>
@@ -50,7 +48,7 @@
                 {% for topping in toppings %}
                         <li class="list-group-item">{{ topping.topping }} </li>
                 {% endfor %}
-        </ul>
+            </ul>
         <h3>Subs</h3>
             <table class="table table-hover table-striped">
                 <th>Type</th>

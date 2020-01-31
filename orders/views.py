@@ -1,13 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .models import Topping, Product, Order, CompletedOrder
 from django.db.utils import OperationalError
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-
+from django.template.loader import render_to_string
 from django.contrib import messages
 # Create your views here.
 try:
@@ -87,8 +86,6 @@ def cart_view(request):
     # calculating cart total
     total_price = sum(total_price)
 
-
-
     context = {
         "owner": owner,
         "total_price": total_price,
@@ -107,13 +104,11 @@ def my_orders_view(request):
 
 
 @login_required()
-def delete_from_cart(request, item_id):
-    # getting product instance by its id
-    product = Product.objects.filter(pk=item_id).first()
-    # getting query set of this item from this user
-    item_to_delete = Order.objects.filter(owner=request.user.id, fulfilled=False, items=product.id)
-    if item_to_delete.exists():
-        item_to_delete.delete()
+def delete_from_cart(request, order_id):
+    # getting order instance by its id
+    product = Order.objects.filter(pk=order_id)
+    if product.exists():
+        product.delete()
     return redirect(reverse('cart'))
 
 
@@ -129,6 +124,7 @@ def add_to_cart(request, item_id):
     # associate this order with the product
     newOrder.items.add(product)
     messages.success(request, f"{product} added to cart.")
+
     return redirect(reverse('menu'))
 
 
@@ -164,7 +160,6 @@ def add_topping(request, order_id, item_type):
                 topping_list.clear()
             else:
                 topping_list.clear()
-
     return redirect(reverse('cart'))
 
 

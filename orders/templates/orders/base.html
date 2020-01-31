@@ -18,8 +18,23 @@
 </head>
 
 <div class="container">
+    {% if user.is_authenticated %}
+        <row>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-4">
+            <a class="navbar-brand px-5" href="{% url 'menu' %}">Domuzcuk's pizza</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+            <div class="menu-items d-flex justify-content-center">
+            <a class="px-4 mt-2" href="{% url "cart" %}">Shopping Cart</a>
+            <a class="px-4 mt-2" href="{% url "my_orders" %}">My Orders</a>
+            <a class="px-4 mt-2">Directions</a>
+            <a class="logout px-3 mt-2" href="{% url "logout" %}">Log out</a>
+            <p class="px-5 mt-2 log-as">Logged as: {{ user.username.capitalize }}</p>
+            </div>
+        </nav></row>
+    {% endif %}
     {% block body %}
-
     {% endblock %}
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
