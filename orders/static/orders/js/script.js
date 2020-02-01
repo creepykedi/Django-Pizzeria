@@ -11,30 +11,32 @@ $(function() {
   rowscount = $('.order-row').length;
   console.log(rowscount);
   let x; // x is a row index
-
+  let z; z=0; //z is adjuster
   for (x = 0 ; x < rowscount; ) {
-      console.log('here');
- if(typeof($('.order-item')[x]) != 'undefined') {
-    item = $('.order-item')[x].textContent;
-    toppings = $('.chosen-toppings')[x].textContent;}
-    item_num = item.replace(/[^0-9]/g, ''); //getting max number of toppings that is in chosen item
+     if(typeof($('.order-item')[x]) != 'undefined'||null) {
+        if ($('.order-item')[x].textContent.replace(/[^0-9]/g, '').length) {
+        item = $('.order-item')[x].textContent;
+        item_num = item.replace(/[^0-9]/g, ''); //getting max number of toppings that is in chosen item
+        toppings = $('.chosen-toppings')[x-z].textContent;}
+     // if there are no toppings, increase loop iterator, increase adjuster Z and skip this iteration
+        else {x++;z++;
+         continue}
+     }
+
     select_button = $(".choose-topping");
     selection_dropdown = $(".select-topping-field");
     orderBtn =  $("#make-order-link");
-    clearBtn = $(".clear-topping")[x];
+    clearBtn = $(".clear-topping")[x-z];
     x++;
-
-    console.log("iteration " + (x-1), select_button.eq(x-1),"x-n is " + (x-1) );
-    console.log("toppings length " + toppings.split(",").length +" chosen length" + item_num + " " + item + " /" + toppings) ;
 
     // if number of chosen toppings and maximum matches, hide selector
     if (item_num == toppings.split(",").length) {
       if (toppings != '') {
-            select_button.eq(x-1).hide();
-            selection_dropdown.eq(x-1).hide();
+            select_button.eq(x-1-z).hide();
+            selection_dropdown.eq(x-1-z).hide();
       }
 } //if any selectors aren't hidden, mute order button
-   if ($(select_button.eq(x-1)).is( ":visible")) {
+   if ($(select_button.eq(x-1-z)).is( ":visible")) {
         orderBtn.addClass('disabled');
       }
   }
