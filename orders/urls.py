@@ -26,5 +26,6 @@ urlpatterns = [
     path(r'^clr_tp/<int:order_id>/$', clear_topping, name='clear_topping'),
     path(r'^add_topping/<int:order_id>(?P^/d<item_type>[^/]+)/$', add_topping, name='add_topping'),
     path("success", views.success_view, name="success"),
-    path('my_orders', views.my_orders_view, name='my_orders')
+    path('my_orders', views.my_orders_view, name='my_orders'),
+    path('directions', views.directions_view, name='directions')
 ]

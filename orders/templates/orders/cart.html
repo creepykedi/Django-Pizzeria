@@ -7,9 +7,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     {% endblock %}
 </head>
-<>
 {% block body %}
-    <p class="heading-cart"> {{ owner.capitalize }}'s Shopping Cart: </p>
+    <p class="heading-cart mb-1"> {{ owner.capitalize }}'s Shopping Cart: </p>
     <ul>
     {% if order_numb %}
         <table class="table table-hover cart">
@@ -33,11 +32,11 @@
                         <form method="post" action="{% url 'add_topping' order.id item.type %}">
                         {% csrf_token %}
                         <select name="topselect" class="custom-select mr-sm-2 select-topping-field">
-                        {% if order.toppingchoice in toppings %}
-                                <option selected>{{order.toppingchoice}}</option>
-                        {% else %}
-                            <option selected disabled>Select Topping</option>
-                        {% endif %}
+                            {% if order.toppingchoice in toppings %}
+                                    <option selected>{{order.toppingchoice}}</option>
+                            {% else %}
+                                <option selected disabled>Select Topping</option>
+                            {% endif %}
                             {% for topping in toppings %}
                                 <option value={{ topping }}>{{ topping }}</option>
                             {% endfor %}

@@ -20,17 +20,17 @@
 <div class="container">
     {% if user.is_authenticated %}
         <row>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-4">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand px-5" href="{% url 'menu' %}">Domuzcuk's pizza</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
             <div class="menu-items d-flex justify-content-center">
-            <a class="px-4 mt-2" href="{% url "cart" %}">Shopping Cart</a>
-            <a class="px-4 mt-2" href="{% url "my_orders" %}">My Orders</a>
-            <a class="px-4 mt-2">Directions</a>
-            <a class="logout px-3 mt-2" href="{% url "logout" %}">Log out</a>
-            <p class="px-5 mt-2 log-as">Logged as: {{ user.username.capitalize }}</p>
+            <a class="px-4 mt-3 menu-items" href="{% url "cart" %}">Shopping Cart</a>
+            <a class="px-4 mt-3 menu-items" href="{% url "my_orders" %}">My Orders</a>
+            <a class="px-4 mt-3 menu-items" href="{% url 'directions' %}">Directions</a>
+            <a class="logout px-3 mt-3 menu-items" href="{% url "logout" %}">Log out</a>
+            <p class="ml-5 mt-3 log-as">Logged as: {{ user.username.capitalize }}</p>
             </div>
         </nav></row>
     {% endif %}

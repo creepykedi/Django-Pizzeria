@@ -12,10 +12,10 @@
         or <a href="{% url "signup" %}">register</a>.</p>
     {% endif %}
     <h1>Our menu</h1>
-    <div class="col-10 menu-category justify-content-center">
-            <a href="">Regular Pizza | </a> <a href="">Sizilian Pizza | </a><a href="">Subs | </a>
-        <a href="">Pastas | </a> <a href="">Salads | </a> <a href="">Dinner Platters </a>
-    <h3>Regular Pizza</h3>
+    <div class="col-10 menu-category mx-auto"><div class="mx-auto col-9">
+            <a href="#regular-pizza">Regular Pizza | </a> <a href="#sicilian-pizza">Sizilian Pizza | </a><a href="#subs">Subs | </a>
+        <a href="#pastas">Pastas | </a> <a href="#salads">Salads | </a> <a href="#dinner-platters">Dinner Platters </a></div>
+    <h3 id="regular-pizza">Regular Pizza</h3>
         <table class="table table-hover">
             <th>Type</th>
             <th>Small</th> <th>Large</th>
@@ -28,7 +28,7 @@
                 {% endif %}
             {% endfor %}
         </table>
-        <h3> Sicilian Pizza</h3>
+        <h3 id="sicilian-pizza"> Sicilian Pizza</h3>
         <table class="table table-hover">
             <th>Type</th>
             <th>Small</th> <th>Large</th>
@@ -49,7 +49,7 @@
                         <li class="list-group-item">{{ topping.topping }} </li>
                 {% endfor %}
             </ul>
-        <h3>Subs</h3>
+        <h3 id="subs">Subs</h3>
             <table class="table table-hover table-striped">
                 <th>Type</th>
                     <th>Small</th><th>Large</th>
@@ -64,19 +64,20 @@
                         {% endif %}
                 {% endfor %}
             </table>
-        <h3> Pastas </h3>
+        <h3 id="pastas"> Pastas </h3>
             <ul class="list-group">
                 {% for pasta in pasta %}
                         <li class="list-group-item">{{ pasta.type }} {{ pasta.price }}<a href="{% url 'add' pasta.id %}">+</a> </li>
                 {% endfor %}
             </ul>
-        <h3> Salads </h3>
+        <h3 id="salads"> Salads </h3>
             <ul class="list-group">
                 {% for salad in salad %}
                         <li class="list-group-item">{{ salad.type }} {{ salad.price }} <a href="{% url 'add' salad.id %}">+</a> </li>
                 {% endfor %}
             </ul>
-        <h3> Dinner Platters</h3>
+
+        <h3 id="dinner-platters"> Dinner Platters</h3>
             <ul class="list-group">
                 {% for platter in platter %}
                     {% if platter.size == 'S' or platter.size == 'SING' %}
@@ -86,8 +87,12 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-     </div>
-    <p></p>
+
+<div class="mx-auto col-9 my-5">
+        <a href="#regular-pizza">Regular Pizza | </a> <a href="#sicilian-pizza">Sizilian Pizza | </a><a href="#subs">Subs | </a>
+    <a href="#pastas">Pastas | </a> <a href="#salads">Salads | </a> <a href="#dinner-platters">Dinner Platters </a>
+</div>
+    </div>
 {% endblock %}
 </body>
 </html>

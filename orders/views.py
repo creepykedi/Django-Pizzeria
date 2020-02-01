@@ -139,27 +139,28 @@ def clean_cart(request):
 @login_required(login_url='login')
 def add_topping(request, order_id, item_type):
     if request.method == "POST":
-        top = request.POST['topselect']
-        order = Order.objects.filter(pk=order_id).first()
-        topping_list = []
-        print(top)
-        # function checks how many toppings were chosen
-        n = str(item_type[0])
-        if n in item_type:
-            # get already selected toppings
-            selected = order.toppingchoice
-            # add them to list of selected toppings
-            topping_list.append(top)
-            topping_list.extend(selected)
-            if len(topping_list) < int(n):
-                order.toppingchoice = topping_list
-                order.save()
-            elif len(topping_list) == int(n):
-                order.toppingchoice = topping_list
-                order.save()
-                topping_list.clear()
-            else:
-                topping_list.clear()
+        top = request.POST.get('topselect')
+        if top:
+            order = Order.objects.filter(pk=order_id).first()
+            topping_list = []
+            print(top)
+            # function checks how many toppings were chosen
+            n = str(item_type[0])
+            if n in item_type:
+                # get already selected toppings
+                selected = order.toppingchoice
+                # add them to list of selected toppings
+                topping_list.append(top)
+                topping_list.extend(selected)
+                if len(topping_list) < int(n):
+                    order.toppingchoice = topping_list
+                    order.save()
+                elif len(topping_list) == int(n):
+                    order.toppingchoice = topping_list
+                    order.save()
+                    topping_list.clear()
+                else:
+                    topping_list.clear()
     return redirect(reverse('cart'))
 
 
@@ -181,3 +182,6 @@ def fulfill_order(request):
             CompletedOrder(order=order).save()
     return render(request, "orders/success.html")
 
+
+def directions_view(request):
+    return render(request, "orders/directions.html")
