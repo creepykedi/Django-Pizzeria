@@ -13,6 +13,6 @@ Allows you to:
 - place an order
 - view your past orders.
 
-Most interactivity comes with adding pizza with toppings. Your shopping cart gets cached automatically.
+Most interactivity comes with adding pizza with toppings. 
 
 Since most html uses django's template engine, if you add any new product instance to a database, it will get updated in html automatically.
