@@ -103,7 +103,7 @@ def my_orders_view(request):
     return render(request, 'orders/my_orders.html', {'orders': orders})
 
 
-@login_required()
+@login_required(login_url='login')
 def delete_from_cart(request, order_id):
     # getting order instance by its id
     product = Order.objects.filter(pk=order_id)
@@ -185,3 +185,4 @@ def fulfill_order(request):
 
 def directions_view(request):
     return render(request, "orders/directions.html")
+

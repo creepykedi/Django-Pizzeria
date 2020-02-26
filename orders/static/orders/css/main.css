@@ -74,11 +74,11 @@ th{
 
 .menu-category{
     font-size: 20px;
-
 }
 .log-as, .menu-items {
     color: white;
 }
 a.menu-items{
     color: #ffbf00;
+    font-size: 18px;
 }
