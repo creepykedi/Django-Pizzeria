@@ -25,7 +25,7 @@ SECRET_KEY = 'i0&iq&e9u9h6(4_7%pt2s9)f=c$kso=k$c$w@fi9215s=1q0^d'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://git.heroku.com/warm-refuge-06600.git', '127.0.0.1']
+ALLOWED_HOSTS = ['https://git.heroku.com/warm-refuge-06600.git', 'https://warm-refuge-06600.herokuapp.com','127.0.0.1']
 LOGIN_URL = '/login'
 
 # Application definition
