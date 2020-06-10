@@ -1,3 +1,4 @@
-# Project 3
+# Django pizzeria
 
-Web Programming with Python and JavaScript
+Basic website of a fictional pizza restaurant.
+Uses Django, axios, bootstrap, jquery
